@@ -388,16 +388,16 @@ def _plpy_check(py_min_ver):
 
     # Check PL/Python existence
     rv = _internal_run_query("SELECT count(*) AS CNT FROM pg_language "
-                             "WHERE lanname = 'plpythonu'", True)
+                             "WHERE lanname = 'plpython3u'", True)
     if int(rv[0]['cnt']) > 0:
         info_(this, "> PL/Python already installed", verbose)
     else:
         info_(this, "> PL/Python not installed", verbose)
         info_(this, "> Creating language PL/Python...", True)
         try:
-            _internal_run_query("CREATE LANGUAGE plpythonu;", True)
+            _internal_run_query("CREATE LANGUAGE plpython3u;", True)
         except:
-            error_(this, """Cannot create language plpythonu. Please check if you
+            error_(this, """Cannot create language plpython3u. Please check if you
                 have configured and installed portid (your platform) with
                 `--with-python` option. Stopping installation...""", False)
             raise Exception
@@ -412,7 +412,7 @@ def _plpy_check(py_min_ver):
             # return '.'.join(str(item) for item in sys.version_info[:3])
             return str(sys.version_info[:3]).replace(',','.').replace(' ','').replace(')','').replace('(','')
         $$
-        LANGUAGE plpythonu;
+        LANGUAGE plpython3u;
     """, True)
     rv = _internal_run_query("SELECT plpy_version_for_madlib() AS ver;", True)
     python = rv[0]['ver']
