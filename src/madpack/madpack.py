@@ -59,7 +59,7 @@ portid_list = []
 for port in ports:
     portid_list.append(port)
 
-SUPPORTED_PORTS = ('postgres', 'greenplum')
+SUPPORTED_PORTS = ('postgres', 'greenplum', 'pieclouddb')
 
 # Global variables
 portid = None       # Target port ID (eg: pg90, gp40)
@@ -352,7 +352,7 @@ def _check_db_port(portid):
         if portid == 'postgres':
             if row[0]['version'].lower().find('greenplum') < 0:
                 return True
-        elif portid == 'greenplum':
+        elif portid == 'greenplum' or portid == 'pieclouddb':
             return True
     return False
 # ------------------------------------------------------------------------------
@@ -946,7 +946,7 @@ def parse_arguments():
         '-c', '--conn', metavar='CONNSTR', nargs=1, dest='connstr', default=None,
         help="""Connection string of the following syntax:
                    [user[/password]@][host][:port][/database]
-                 If not provided default values will be derived for PostgreSQL and Greenplum:
+                 If not provided default values will be derived for PostgreSQL, Greenplum and PieCloudDB:
                  - user: PGUSER or USER env variable or OS username
                  - pass: PGPASSWORD env variable or runtime prompt
                  - host: PGHOST env variable or 'localhost'
@@ -1211,7 +1211,7 @@ def create_install_madlib_sqlfile(args, madpack_cmd):
 
 def get_madlib_function_drop_str(schema):
 
-    if portid == 'greenplum':
+    if portid == 'greenplum' or portid == 'pieclouddb':
         case_str = """
         CASE
           WHEN p.proisagg THEN 'aggregate'
@@ -1309,7 +1309,7 @@ def set_dynamic_library_path_in_database(dbver_split, madlib_library_path):
     if madlib_library_path not in dynamic_library_path.split(":"):
         dynamic_library_path = dynamic_library_path + ':' + madlib_library_path
 
-        if portid == 'greenplum':
+        if portid == 'greenplum' or portid == 'pieclouddb' :
             if is_rev_gte(dbver_split, get_rev_num('6.0')):
                 ret = os.system('gpconfig -c dynamic_library_path -v \'{0}\''.format(dynamic_library_path))
             else:
@@ -1427,7 +1427,7 @@ def main(argv):
 
             dbver_split = get_rev_num(dbver)
             if portid == 'greenplum':
-                if is_rev_gte(dbver_split, get_rev_num('5.0')):
+                if is_rev_gte(dbver_split, get_rev_num('5.0')) or is_rev_gte(dbver_split, get_rev_num('7.0')):
                     # GPDB (starting 5.0) uses semantic versioning. Hence, only
                     # need first digit for major version.
                     dbver = str(dbver_split[0])
@@ -1440,12 +1440,21 @@ def main(argv):
                 else:
                     # only need the first two digits for <= 4.3.4
                     dbver = '.'.join(map(str, dbver_split[:2]))
+                info_(this, "dbver greenplum is %s" %dbver)
             elif portid == 'postgres':
                 if is_rev_gte(dbver_split, get_rev_num('10.0')):
                     # Postgres starting 10.0 uses semantic versioning. Hence,
                     # only need first digit for major version.
                     dbver = str(dbver_split[0])
+                info_(this, "dbver postgres is %s" %dbver)
+             elif portid == 'pieclouddb':
+                if is_rev_gte(dbver_split, get_rev_num('1.0')):
+                    # PieCloudDB uses semantic versioning. Hence, only
+                    # need first digit for major version.
+                    dbver = str(dbver_split[0])
+                info_(this, "dbver ofpieclouddb is %s" %dbver)
             if not os.path.isdir(os.path.join(portdir, dbver)):
+                info_(this, "portdir is %s and dbver is %s" %(portdir, dbver))
                 error_(this, "This version is not among the %s versions for which "
                        "MADlib support files have been installed (%s)." %
                        (ports[portid]['name'], ", ".join(supportedVersions)), True)
