@@ -16,4 +16,4 @@
 # under the License.
 
 set(_FIND_PACKAGE_FILE "${CMAKE_CURRENT_LIST_FILE}")
-include("${CMAKE_CURRENT_LIST_DIR}/FindGreenplum.cmake")
+include("${CMAKE_CURRENT_LIST_DIR}/FindPieCloudDB.cmake")
