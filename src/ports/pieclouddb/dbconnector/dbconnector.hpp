@@ -6,8 +6,8 @@
  *
  *//* ----------------------------------------------------------------------- */
 
-#ifndef MADLIB_GREENPLUM_DBCONNECTOR_HPP
-#define MADLIB_GREENPLUM_DBCONNECTOR_HPP
+#ifndef MADLIB_PIECLOUDDB_DBCONNECTOR_HPP
+#define MADLIB_PIECLOUDDB_DBCONNECTOR_HPP
 
 // On platforms based on PostgreSQL we can include a different set of headers.
 #define MADLIB_POSTGRES_HEADERS
@@ -17,7 +17,7 @@ extern "C" {
     #include <funcapi.h>
     #include <catalog/pg_proc.h>
     #include <catalog/pg_type.h>
-    #include <executor/executor.h> // Greenplum requires this for GetAttributeByNum()
+    #include <executor/executor.h> // PIECLOUDDB requires this for GetAttributeByNum()
     #include <miscadmin.h>         // Memory allocation, e.g., HOLD_INTERRUPTS
     #include <utils/acl.h>
     #include <utils/array.h>
@@ -34,4 +34,4 @@ extern "C" {
 
 #include "../../postgres/dbconnector/dbconnector.hpp"
 
-#endif // defined(MADLIB_GREENPLUM_DBCONNECTOR_HPP)
+#endif // defined(MADLIB_PIECLOUDDB_DBCONNECTOR_HPP)
