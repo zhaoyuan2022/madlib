@@ -1,6 +1,6 @@
-# Define Greenplum feature macros
+# Define pieclouddb feature macros
 #
-function(define_greenplum_features IN_VERSION OUT_FEATURES)
+function(define_pieclouddb_features IN_VERSION OUT_FEATURES)
     if(NOT ${IN_VERSION} VERSION_LESS "4.1")
         list(APPEND ${OUT_FEATURES} __HAS_ORDERED_AGGREGATES__)
     endif()
@@ -15,7 +15,7 @@ function(define_greenplum_features IN_VERSION OUT_FEATURES)
 
     # Pass values to caller
     set(${OUT_FEATURES} "${${OUT_FEATURES}}" PARENT_SCOPE)
-endfunction(define_greenplum_features)
+endfunction(define_pieclouddb_features)
 
 function(add_gppkg GPDB_VERSION GPDB_VARIANT GPDB_VARIANT_SHORT UPGRADE_SUPPORT)
     string(TOLOWER ${GPDB_VERSION} GPDB_VERSION_LC)

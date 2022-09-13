@@ -208,7 +208,7 @@ function(add_${PORT_LC}_library IN_PORT_VERSION)
 
 # -- 4.2. Preprocess all Python files ------------------------------------------
 
-    define_greenplum_features(${IN_PORT_VERSION} DBMS_FEATURES)
+    define_pieclouddb_features(${IN_PORT_VERSION} DBMS_FEATURES)
     define_m4_macros(M4_DEFINES_CMD_LINE M4_DEFINES_CODE ${DBMS_FEATURES})
 
     add_python_files(
@@ -288,7 +288,7 @@ macro(add_current_${PORT_LC}_version)
 
     find_package(${PORT}_${_VERSION_UNDERSCORES})
     if(${PORT_UC}_${_VERSION_UNDERSCORES}_FOUND)
-        add_greenplum_library(${_VERSION})
+        add_pieclouddb_library(${_VERSION})
     endif(${PORT_UC}_${_VERSION_UNDERSCORES}_FOUND)
 endmacro(add_current_${PORT_LC}_version)
 
