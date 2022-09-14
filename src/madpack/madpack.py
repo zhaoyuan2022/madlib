@@ -1304,11 +1304,11 @@ def find_madlib_library_path():
 def set_dynamic_library_path_in_database(dbver_split, madlib_library_path):
 
     global dynamic_library_path
-    dynamic_library_path = _internal_run_query("SHOW dynamic_library_path", True)[0]['dynamic_library_path']
-
+    dynamic_library_path = _internal_run_query("SHOW dynamic_library_path", True)[0]['dynamic_library_path'].lstrip(':')
+    info_(this, "dynamic_path is %s and madlib_library_path is %s" % (dynamic_library_path, madlib_library_path))
     if madlib_library_path not in dynamic_library_path.split(":"):
-        dynamic_library_path = dynamic_library_path + ':' + madlib_library_path
-
+        dynamic_library_path = dynamic_library_path.lstrip(':') + ':' + madlib_library_path
+        info_(this, " new dynamic_path is %s " % (dynamic_library_path))
         if portid == 'greenplum' or portid == 'pieclouddb' :
             if is_rev_gte(dbver_split, get_rev_num('6.0')):
                 ret = os.system('gpconfig -c dynamic_library_path -v \'{0}\''.format(dynamic_library_path))
