@@ -14,11 +14,11 @@ namespace dbconnector {
 namespace postgres {
 
 namespace {
+// Declare for pdb, or the founction can not be found 
+extern "C" char *format_procedure(Oid procedure_oid);
 // No need to make these function accessible outside of the postgres namespace.
-
 MADLIB_WRAP_PG_FUNC(
     bool, type_is_array, (Oid typid), (typid))
-
 MADLIB_WRAP_PG_FUNC(
     AclResult, pg_proc_aclcheck, (Oid proc_oid, Oid roleid, AclMode mode),
     (proc_oid, roleid, mode))
