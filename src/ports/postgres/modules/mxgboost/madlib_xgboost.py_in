@@ -22,7 +22,7 @@ import re
 import pandas as pd
 import xgboost as xgb
 import numpy
-import cPickle as pickle
+import pickle as pickle
 import zlib
 import ast
 import collections
@@ -95,7 +95,7 @@ def takeClosest(myList, myNumber):
 def expand_grid(params):
     #Expand the params to run-grid search
     params_list = []
-    for key, val in params.items():
+    for key, val in list(params.items()):
         #If supplied param is a list of values, expand it out
         if(val and isinstance(val, collections.Iterable)):
             r = ["""{k}={v}""".format(k=key,v=v) for v in val]
@@ -118,7 +118,7 @@ def xgboost_train(schema_madlib, dframe, features_all, class_label, params,
 
     df = pickle.loads(zlib.decompress(dframe))
     features_all.append(id_column)
-    features = filter(lambda x: x in df.columns, features_all)
+    features = [x for x in features_all if x in df.columns]
     X = df[features].as_matrix()
     y = df[class_label]
     class_list = numpy.unique(y).tolist()
@@ -128,7 +128,7 @@ def xgboost_train(schema_madlib, dframe, features_all, class_label, params,
         #We don't actually want the test set size to change. We want it to be constant as we change train set size so we can compare apples to apples
         #so lets lock it at 20% (only less if the train size is > 80%)
         test_set_size = min((1-train_set_size),0.2)
-        X_test = X_test[range(0,int(len(y)*test_set_size)),]
+        X_test = X_test[list(range(0,int(len(y)*test_set_size))),]
         y_test = y_test.head(int(len(y)*test_set_size))
     else:
         split_indx = numpy.WHERE(features == train_set_split_var)[0]
@@ -153,17 +153,13 @@ def xgboost_train(schema_madlib, dframe, features_all, class_label, params,
     total_samples = sum(sample_representation)
     sample_weights = None
     if not class_weights:
-        sample_weights = map(
-                lambda s: total_samples*1.0/sample_representation[s]
+        sample_weights = [total_samples*1.0/sample_representation[s]
                                 /
-                sum([total_samples*1.0/sample_representation[c] for c in sample_representation.keys()])
-                ,
-                y_train
-            )
+                sum([total_samples*1.0/sample_representation[c] for c in list(sample_representation.keys())]) for s in y_train]
     else:
         #User-supplied class-weights
         class_weights_dict = ast.literal_eval(re.sub("[\\t]","",class_weights).strip())
-        sample_weights = map(lambda s: class_weights_dict[s], y_train)
+        sample_weights = [class_weights_dict[s] for s in y_train]
 
     #Train gradient boosted trees
     p_list = [p.split('=') for p in ast.literal_eval(re.sub("[\\t]","",params).strip())]
@@ -196,7 +192,7 @@ def xgboost_train(schema_madlib, dframe, features_all, class_label, params,
         key=itemgetter(1),
         reverse=True
     )
-    fnames, f_importance_scores = zip(*fnames_importances)
+    fnames, f_importance_scores = list(zip(*fnames_importances))
     important_features = pd.DataFrame(fnames_importances)
 
     test_ids = [int(x) for x in test_ids]
@@ -436,12 +432,12 @@ def xgboost_predict(schema_madlib, scoring_tbl, mdl_table, mdl_output_tbl,
     predicted_class_proba_label = class_label+'_proba_predicted' if class_label else 'class_label_proba_predicted'
     pred = pd.Series(y_pred_test, index = X_test.index).to_frame(predicted_class_label)
     num_unique_classes = pd.DataFrame(data=pred[predicted_class_label]).apply(lambda x: len(x.unique()))
-    if (range(num_unique_classes) == [0]):
+    if (list(range(num_unique_classes)) == [0]):
         plpy.error('XGBoost: Every prediction is of the same class.')
 
     pred_proba = pd.DataFrame(data=y_pred_proba_test,
         index = X_test.index,
-        columns = range(num_unique_classes) #if not class_label else class_label
+        columns = list(range(num_unique_classes)) #if not class_label else class_label
         )
 
     res_df = pd.concat([df[id_column],pred,pred_proba],axis=1).set_index(X_test.index)
@@ -461,7 +457,7 @@ def xgboost_predict(schema_madlib, scoring_tbl, mdl_table, mdl_output_tbl,
                     key=itemgetter(1),
                     reverse=True
                 )
-        fnames, f_importances = zip(*fnames_importances)
+        fnames, f_importances = list(zip(*fnames_importances))
         fnames = str(fnames).replace('(','{').replace(')','}').replace('\'','\"')
         f_importances = str(f_importances).replace('(','{').replace(')','}').replace('\'','\"')
     else:

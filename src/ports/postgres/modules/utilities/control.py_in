@@ -250,7 +250,7 @@ class AOControl(ContextDecorator):
     @property
     def _gp_default_storage_options(self):
         return ','.join(['{0}={1}'.format(k, v)
-                        for k, v in self.storage_options_dict.iteritems()])
+                        for k, v in self.storage_options_dict.items()])
 
     def __enter__(self):
         # We first check if we can get the guc value from the database using the

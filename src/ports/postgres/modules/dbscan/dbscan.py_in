@@ -1337,7 +1337,7 @@ def _dbscan_leaf(db_rec, eps, min_samples, metric, num_internal_points,
         #  and yield resulting internal records
         DEBUG.start_timing("dbscan_leaf_internal")
         cluster = 0
-        for rec in records.values():
+        for rec in list(records.values()):
             if rec.cluster_id != label.UNLABELLED:
                 continue
 
@@ -1463,13 +1463,13 @@ def sf_transition(state, src, dest, n_rows, gp_segment_id, **kwargs):
             else:
                 if cl_id_k1 != cl_id_k2:
                     if cl_counts[cl_id_k1] > cl_counts[cl_id_k2]:
-                        for chkey,chvalue in cl_ids.items():
+                        for chkey,chvalue in list(cl_ids.items()):
                             if chvalue == cl_id_k2:
                                 cl_ids[chkey] = cl_id_k1
                         cl_counts[cl_id_k1] += cl_counts[cl_id_k2]
                         cl_counts[cl_id_k2] = 0
                     else:
-                        for chkey,chvalue in cl_ids.items():
+                        for chkey,chvalue in list(cl_ids.items()):
                             if chvalue == cl_id_k1:
                                 cl_ids[chkey] = cl_id_k2
                         cl_counts[cl_id_k2] += cl_counts[cl_id_k1]
@@ -1480,7 +1480,7 @@ def sf_transition(state, src, dest, n_rows, gp_segment_id, **kwargs):
             running_cl_id = -1
             running_sf_center = -1
             ret = []
-            for vertex_id, vertex_cl in sorted(cl_ids.items(), key=lambda item: item[1]):
+            for vertex_id, vertex_cl in sorted(list(cl_ids.items()), key=lambda item: item[1]):
 
                 # Check if we are still in the same snowflake
                 if vertex_cl != running_cl_id:

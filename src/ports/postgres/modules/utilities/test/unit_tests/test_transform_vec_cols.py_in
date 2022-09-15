@@ -135,7 +135,7 @@ class Vec2ColsTestSuite(unittest.TestCase):
 
     def test_validate_output_cols_max_cols_exception(self):
         with self.assertRaises(plpy.PLPYException):
-            self.subject.validate_output_cols(range(0, 1550), range(1550, 1650))
+            self.subject.validate_output_cols(list(range(0, 1550)), list(range(1550, 1650)))
 
     def test_validate_output_cols_duplicate_cols_exception(self):
         with self.assertRaises(plpy.PLPYException):
@@ -144,7 +144,7 @@ class Vec2ColsTestSuite(unittest.TestCase):
             self.subject.validate_output_cols(['a', 'b', 'c'], ['a', 'b'])
 
     def test_validate_output_cols_passes(self):
-        self.subject.validate_output_cols(range(0, 1450), range(1450, 1500))
+        self.subject.validate_output_cols(list(range(0, 1450)), list(range(1450, 1500)))
         self.subject.validate_output_cols(['a', 'b', 'c'], ['d', 'e'])
 
 class Cols2VecTestSuite(unittest.TestCase):

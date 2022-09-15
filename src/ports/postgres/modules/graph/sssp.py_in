@@ -585,7 +585,7 @@ def _validate_sssp(vertex_table, vertex_id, edge_table, edge_params,
     validate_graph_coding(vertex_table, vertex_id, edge_table, edge_params,
                           out_table, 'SSSP')
 
-    _assert(isinstance(source_vertex[0], int) or isinstance(source_vertex[0], long),
+    _assert(isinstance(source_vertex[0], int) or isinstance(source_vertex[0], int),
             """Graph SSSP: Source vertex {source_vertex} has to be an integer or integer array.""".
             format(**locals()))
 

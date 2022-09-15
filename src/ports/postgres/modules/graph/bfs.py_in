@@ -59,7 +59,7 @@ def _validate_bfs(vertex_table, vertex_id, edge_table, edge_params,
         """Graph BFS: Invalid value for directed ({0}), must be boolean.""".
         format(directed))
 
-    _assert(isinstance(source_vertex,int) or isinstance(source_vertex,long),
+    _assert(isinstance(source_vertex,int) or isinstance(source_vertex,int),
         """Graph BFS: Source vertex {source_vertex} has to be an integer or bigint.""".
         format(**locals()))
     src_exists = plpy.execute("""

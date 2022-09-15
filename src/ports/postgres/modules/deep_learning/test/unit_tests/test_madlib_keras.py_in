@@ -358,7 +358,7 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
             self.total_images_per_seg, self.accessible_gpus_for_seg,
             self.serialized_weights, False, **k)
         graph2 = self.subject.tf.get_default_graph()
-        self.assertNotEquals(graph1, graph2)
+        self.assertNotEqual(graph1, graph2)
         state = np.fromstring(new_state, dtype=np.float32)
 
         ## image count should not be added to the final state of
@@ -399,7 +399,7 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
             self.total_images_per_seg, self.accessible_gpus_for_seg,
             self.serialized_weights, False, **k)
         graph2 = self.subject.tf.get_default_graph()
-        self.assertNotEquals(graph1, graph2)
+        self.assertNotEqual(graph1, graph2)
         weights = np.fromstring(new_state, dtype=np.float32)
 
         ## image count should not be added to the final state of
@@ -434,7 +434,7 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
             self.total_images_per_seg, self.accessible_gpus_for_seg,
             self.serialized_weights, True, **k)
         graph2 = self.subject.tf.get_default_graph()
-        self.assertNotEquals(graph1, graph2)
+        self.assertNotEqual(graph1, graph2)
 
         weights = np.fromstring(new_state, dtype=np.float32)
 
@@ -465,16 +465,16 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
 
         last_iter_tf_graph = self.subject.tf.get_default_graph()
 
-        self.assertEquals(first_iter_keras_sess, last_iter_keras_sess)
-        self.assertEquals(first_iter_tf_graph, last_iter_tf_graph)
+        self.assertEqual(first_iter_keras_sess, last_iter_keras_sess)
+        self.assertEqual(first_iter_tf_graph, last_iter_tf_graph)
 
         ###################### eval transition for last iteration ###########
         self._run_eval_iteration(True, last_iter_keras_sess, last_iter_tf_graph, **kwargs)
         eval_last_iter_keras_sess = self.subject.K.get_session()
         eval_last_iter_tf_graph = self.subject.tf.get_default_graph()
 
-        self.assertNotEquals(eval_last_iter_keras_sess, last_iter_keras_sess)
-        self.assertNotEquals(eval_last_iter_tf_graph, last_iter_tf_graph)
+        self.assertNotEqual(eval_last_iter_keras_sess, last_iter_keras_sess)
+        self.assertNotEqual(eval_last_iter_tf_graph, last_iter_tf_graph)
         self._assert_gd_cleared(GD)
 
     def test_fit_eval_2_iterations_mcf_1_gpdb(self):
@@ -495,8 +495,8 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
         eval_first_iter_keras_sess = self.subject.K.get_session()
         eval_first_iter_tf_graph = self.subject.tf.get_default_graph()
 
-        self.assertEquals(eval_first_iter_keras_sess, first_iter_keras_sess)
-        self.assertEquals(eval_first_iter_tf_graph, first_iter_tf_graph)
+        self.assertEqual(eval_first_iter_keras_sess, first_iter_keras_sess)
+        self.assertEqual(eval_first_iter_tf_graph, first_iter_tf_graph)
 
         # iteration 2 fit (last iteration)
         last_iter_keras_sess = self._run_fit_iteration(**kwargs)
@@ -504,8 +504,8 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
 
         last_iter_tf_graph = self.subject.tf.get_default_graph()
 
-        self.assertEquals(first_iter_keras_sess, last_iter_keras_sess)
-        self.assertEquals(first_iter_tf_graph, last_iter_tf_graph)
+        self.assertEqual(first_iter_keras_sess, last_iter_keras_sess)
+        self.assertEqual(first_iter_tf_graph, last_iter_tf_graph)
 
         # iteration 2 eval (last iteration)
         # eval and fit use the same session & graph for all iterations.
@@ -519,8 +519,8 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
         eval_last_iter_keras_sess = self.subject.K.get_session()
         eval_last_iter_tf_graph = self.subject.tf.get_default_graph()
 
-        self.assertNotEquals(eval_last_iter_keras_sess, last_iter_keras_sess)
-        self.assertNotEquals(eval_last_iter_tf_graph, last_iter_tf_graph)
+        self.assertNotEqual(eval_last_iter_keras_sess, last_iter_keras_sess)
+        self.assertNotEqual(eval_last_iter_tf_graph, last_iter_tf_graph)
         self._assert_gd_cleared(GD)
 
     def test_fit_multiple_2_iterations(self):
@@ -543,8 +543,8 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
         last_iter_keras_sess = self._run_fit_multiple_iteration(**kwargs)
         self._assert_gd_cleared(GD)
 
-        self.assertNotEquals(first_iter_keras_sess, last_iter_keras_sess)
-        self.assertNotEquals(first_iter_tf_graph, last_iter_tf_graph)
+        self.assertNotEqual(first_iter_keras_sess, last_iter_keras_sess)
+        self.assertNotEqual(first_iter_tf_graph, last_iter_tf_graph)
 
     def test_eval_multiple_any_iteration(self):
         # This test tests 2 things:
@@ -562,8 +562,8 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
         eval_iter_keras_sess2 = self.subject.K.get_session()
         eval_iter_tf_graph2 = self.subject.tf.get_default_graph()
 
-        self.assertNotEquals(eval_iter_keras_sess1, eval_iter_keras_sess2)
-        self.assertNotEquals(eval_iter_tf_graph1, eval_iter_tf_graph2)
+        self.assertNotEqual(eval_iter_keras_sess1, eval_iter_keras_sess2)
+        self.assertNotEqual(eval_iter_tf_graph1, eval_iter_tf_graph2)
         self._assert_gd_cleared(GD)
 
     def _run_eval_iteration(self, final_iteration, prev_keras_sess, prev_tf_graph, called_from_fit_multiple=False, **kwargs):
@@ -577,8 +577,8 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
         eval_first_buffer_tf_graph = self.subject.tf.get_default_graph()
 
         if not called_from_fit_multiple:
-            self.assertEquals(eval_first_buffer_keras_sess, prev_keras_sess)
-            self.assertEquals(eval_first_buffer_tf_graph, prev_tf_graph)
+            self.assertEqual(eval_first_buffer_keras_sess, prev_keras_sess)
+            self.assertEqual(eval_first_buffer_tf_graph, prev_tf_graph)
 
         self._test_internal_keras_eval_transition_middle_buffer(final_iteration,
                                                                 **kwargs )
@@ -642,10 +642,10 @@ class MadlibKerasFitEvalTransitionTestCase(unittest.TestCase):
 
     def _assert_keras_session_same_as_gd_session(self, gd):
         sess = self.subject.K.get_session()
-        self.assertEquals(sess, gd['sess'])
+        self.assertEqual(sess, gd['sess'])
 
     def _assert_gd_cleared(self, gd):
-        self.assertEquals(0, len(gd.keys()))
+        self.assertEqual(0, len(list(gd.keys())))
 
     def _assert_gd_is_valid(self, gd):
         self.assertTrue(gd['sess'])
@@ -1343,7 +1343,7 @@ class MadlibKerasFitCommonValidatorTestCase(unittest.TestCase):
         self.subject.FitCommonValidator.get_source_summary_table_dict = \
             Mock(return_value={'dependent_varname':'a',
                                'independent_varname':['b']})
-        with self.assertRaisesRegexp(plpy.PLPYException, expected_error_regex):
+        with self.assertRaisesRegex(plpy.PLPYException, expected_error_regex):
             self.subject.FitCommonValidator(
                 'test_table', 'val_table', 'model_table', 5, None, False, False, [0],
                 'module_name', None)
@@ -1352,7 +1352,7 @@ class MadlibKerasFitCommonValidatorTestCase(unittest.TestCase):
         self.subject.FitCommonValidator.get_source_summary_table_dict = \
             Mock(return_value={'dependent_varname':['a'],
                                'independent_varname':'b'})
-        with self.assertRaisesRegexp(plpy.PLPYException, expected_error_regex):
+        with self.assertRaisesRegex(plpy.PLPYException, expected_error_regex):
             self.subject.FitCommonValidator(
                 'test_table', 'val_table', 'model_table', 5, None, False, False, [0],
                 'module_name', None)
@@ -1361,7 +1361,7 @@ class MadlibKerasFitCommonValidatorTestCase(unittest.TestCase):
         self.subject.FitCommonValidator.get_source_summary_table_dict = \
             Mock(return_value={'dependent_varname':'a',
                                'independent_varname':'b'})
-        with self.assertRaisesRegexp(plpy.PLPYException, expected_error_regex):
+        with self.assertRaisesRegex(plpy.PLPYException, expected_error_regex):
             self.subject.FitCommonValidator(
                 'test_table', 'val_table', 'model_table', 5, None, False, False, [0],
                 'module_name', None)
@@ -1410,18 +1410,18 @@ class InputValidatorTestCase(unittest.TestCase):
         self.model.add(Dense(1599))
         with self.assertRaises(plpy.PLPYException) as error:
             self.subject.validate_class_values(
-                self.module_name, [range(1599)], 'prob', self.model.to_json())
+                self.module_name, [list(range(1599))], 'prob', self.model.to_json())
         self.assertIn('1600', str(error.exception))
 
     def test_validate_class_values_valid_class_values_prob(self):
         self.subject.validate_class_values(
-            self.module_name, [range(self.num_classes)], 'prob', self.model.to_json())
+            self.module_name, [list(range(self.num_classes))], 'prob', self.model.to_json())
         self.subject.validate_class_values(
             self.module_name, None, 'prob', self.model.to_json())
 
     def test_validate_class_values_valid_pred_type_valid_class_values_response(self):
         self.subject.validate_class_values(
-            self.module_name, [range(self.num_classes)], 'response', self.model.to_json())
+            self.module_name, [list(range(self.num_classes))], 'response', self.model.to_json())
         self.subject.validate_class_values(
             self.module_name, None, 'response', self.model.to_json())
 
@@ -1497,7 +1497,7 @@ class InputValidatorTestCase(unittest.TestCase):
         model.add(Activation('softmax'))
 
         self.subject.validate_class_values(
-            self.module_name, [range(num_classes)], 'prob', model.to_json())
+            self.module_name, [list(range(num_classes))], 'prob', model.to_json())
 
     def test_validate_class_values_last_layer_not_dense_multiio(self):
         num_classes = 3
@@ -1510,7 +1510,7 @@ class InputValidatorTestCase(unittest.TestCase):
         model.add(Activation('softmax'))
 
         self.subject.validate_class_values(
-            self.module_name, [range(num_classes), range(num_classes)], 'prob', model.to_json())
+            self.module_name, [list(range(num_classes)), list(range(num_classes))], 'prob', model.to_json())
 
     def test_validate_class_values_mismatch(self):
         expected_error_regex = ".*do not match.*architecture"
@@ -1522,9 +1522,9 @@ class InputValidatorTestCase(unittest.TestCase):
                          input_shape=(1,1,1,), padding='same'))
         model.add(Dense(num_classes))
         model.add(Activation('relu'))
-        with self.assertRaisesRegexp(plpy.PLPYException, expected_error_regex):
+        with self.assertRaisesRegex(plpy.PLPYException, expected_error_regex):
             self.subject.validate_class_values(
-                self.module_name, [range(num_classes), range(num_classes)], 'prob', model.to_json())
+                self.module_name, [list(range(num_classes)), list(range(num_classes))], 'prob', model.to_json())
 
         # two dense layers
         model = Sequential()
@@ -1532,9 +1532,9 @@ class InputValidatorTestCase(unittest.TestCase):
                          input_shape=(1,1,1,), padding='same'))
         model.add(Dense(2))
         model.add(Dense(num_classes))
-        with self.assertRaisesRegexp(plpy.PLPYException, expected_error_regex):
+        with self.assertRaisesRegex(plpy.PLPYException, expected_error_regex):
             self.subject.validate_class_values(
-                self.module_name, [range(num_classes), range(num_classes)], 'prob', model.to_json())
+                self.module_name, [list(range(num_classes)), list(range(num_classes))], 'prob', model.to_json())
 
     def test_validate_class_values_no_units(self):
         expected_error_regex = ".*Unable.*classes.*architecture"
@@ -1544,12 +1544,12 @@ class InputValidatorTestCase(unittest.TestCase):
         model.add(Activation('relu'))
         model.add(Conv2D(2, kernel_size=(1, 1), activation='relu',
                          input_shape=(1,1,1,), padding='same'))
-        with self.assertRaisesRegexp(plpy.PLPYException, expected_error_regex):
+        with self.assertRaisesRegex(plpy.PLPYException, expected_error_regex):
             self.subject.validate_class_values(
-                self.module_name, [range(num_classes)], 'prob', model.to_json())
-        with self.assertRaisesRegexp(plpy.PLPYException, expected_error_regex):
+                self.module_name, [list(range(num_classes))], 'prob', model.to_json())
+        with self.assertRaisesRegex(plpy.PLPYException, expected_error_regex):
             self.subject.validate_class_values(
-                self.module_name, [range(num_classes), range(num_classes)], 'prob', model.to_json())
+                self.module_name, [list(range(num_classes)), list(range(num_classes))], 'prob', model.to_json())
 
 
 class MadlibSerializerTestCase(unittest.TestCase):

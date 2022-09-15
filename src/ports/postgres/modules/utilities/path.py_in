@@ -270,7 +270,7 @@ def _parse_symbol_str(symbol_expr, pattern_expr):
             orig_sym, sym_def = (i.strip() for i in sym_def_split)
             orig_symbols_ordered.append(orig_sym)
             try:
-                next_sym = all_symbols.next()
+                next_sym = next(all_symbols)
             except StopIteration:
                 plpy.error("Path error: Total symbols in the symbol expression "
                            "exceed maximum number of symbols allowed.")
@@ -286,7 +286,7 @@ def _parse_symbol_str(symbol_expr, pattern_expr):
     # replace each occurence of the original symbol with the new
     # perform this operation in descending order of length to avoid substituting
     # subset of any symbol
-    old_symbols_desc = list(sorted(old_to_new.keys(), key=len, reverse=True))
+    old_symbols_desc = list(sorted(list(old_to_new.keys()), key=len, reverse=True))
     replace_pattern = re.compile('|'.join(old_symbols_desc), re.IGNORECASE)
     new_pattern_expr = replace_pattern.sub(
         lambda m: old_to_new[re.escape(string.lower(m.group(0)))],

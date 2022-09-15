@@ -355,7 +355,7 @@ def pivot(schema_madlib, source_table, output_table, index, pivot_cols,
             with MinWarning("warning"):
                 # The column options from value columns and aggregates
                 # times the number of pivot combinations
-                if ((sum([len(item) for item in agg_dict.values()])*
+                if ((sum([len(item) for item in list(agg_dict.values())])*
                         len(pivot_comb)) > MAX_OUTPUT_COLUMN_COUNT):
                     plpy.warning(
                         "Pivot: Too many distinct values for pivoting! "
@@ -449,7 +449,7 @@ def validate_output_types(source_table, agg_dict, is_array_output):
     Returns:
         None
     """
-    for val, func_iterable in agg_dict.items():
+    for val, func_iterable in list(agg_dict.items()):
         for func in func_iterable:
             func_call_str = '{0}({1})'.format(func, val)
             _assert(not ('[]' in get_expr_type(func_call_str, source_table) and
