@@ -121,7 +121,7 @@ m4_define(<!PythonFunctionBodyOnly!>, <!
          'JOIN pg_namespace n ON (p.pronamespace = n.oid) ' \
          'WHERE p.oid = %s' % foid, 1)
 
-    global schema_madlib
+    global schema_madlib1
     schema_madlib = rv[0]['nspname']
     from utilities.control import AOControl,MinWarning
 !>)
