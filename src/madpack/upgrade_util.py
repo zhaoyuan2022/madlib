@@ -178,7 +178,7 @@ class ChangeHandler(UpgradeBase):
         _return_obj = defaultdict(list) if not output_config_dict else output_config_dict
         if config_iterable is not None:
             for each_config in config_iterable:
-                for obj_name, obj_details in each_config.items():
+                for obj_name, obj_details in list(each_config.items()):
                     formatted_obj = {}
                     for k, v in list(obj_details.items()):
                         v = v.lower().replace('schema_madlib', self._schema) if v else ""
@@ -631,7 +631,7 @@ class ViewDependency(UpgradeBase):
 
         while True:
             new_checklist = []
-            for depender, dependeelist in self._view2view.items():
+            for depender, dependeelist in list(self._view2view.items()):
                 for dependee in dependeelist:
                     if dependee in checklist and depender not in checklist:
                         new_checklist.append(depender)
@@ -643,7 +643,7 @@ class ViewDependency(UpgradeBase):
 
         # Filter recursive dependencies not related with MADLib UDF/UDAs
         filtered_view2view = defaultdict(list)
-        for depender, dependeelist in self._view2view.items():
+        for depender, dependeelist in list(self._view2view.items()):
             filtered_dependeelist = [r for r in dependeelist if r in checklist]
             if len(filtered_dependeelist) > 0:
                 filtered_view2view[depender] = filtered_dependeelist
@@ -1122,7 +1122,7 @@ class ScriptCleaner(UpgradeBase):
         self._get_existing_uda()
         aggregate_patterns = []
 
-        for each_uda, uda_details in self._existing_uda.items():
+        for each_uda, uda_details in list(self._existing_uda.items()):
             for each_item in uda_details:
                 if each_uda in self._ch.uda:
                     if each_item in self._ch.uda[each_uda]:

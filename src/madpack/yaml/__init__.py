@@ -286,3 +286,21 @@ class YAMLObject(object, metaclass=YAMLObjectMetaclass):
                 flow_style=cls.yaml_flow_style)
     to_yaml = classmethod(to_yaml)
 
+__all__ = [
+"composer",
+"constructor",
+"cyaml",
+"dumper",
+"emitter",
+"error",
+"events",
+"loader",
+"nodes",
+"parser",
+"reader",
+"representer",
+"resolver",
+"scanner",
+"serializer",
+"tokens"
+]

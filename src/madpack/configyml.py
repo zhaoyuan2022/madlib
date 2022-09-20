@@ -57,7 +57,7 @@ def get_ports(configdir):
         try:
             conf[port]['name']
         except:
-            print("configyml : ERROR : malformed Ports.yml: no name element for port " + port)
+            print(("configyml : ERROR : malformed Ports.yml: no name element for port " + port))
             exit(2)
         
     return conf
@@ -76,13 +76,13 @@ def get_modules( confdir):
     try:
         conf = yaml.load( open( confdir + '/' + fname))
     except:
-        print("configyml : ERROR : missing or malformed " + confdir + '/' + fname)
+        print(("configyml : ERROR : missing or malformed " + confdir + '/' + fname))
         raise Exception
 
     try:
         conf['modules']
     except:
-        print("configyml : ERROR : missing modules section in " + fname)
+        print(("configyml : ERROR : missing modules section in " + fname))
         raise Exception
         
     conf = topsort_modules( conf)
@@ -110,9 +110,9 @@ def topsort(depdict):
         found = 0  # flag to check if we find anything new this iteration
         newdepdict = dict()
         # find the keys with no values
-        keynoval = [t for t in iter(depdict.items()) if t[1] == []]
+        keynoval = [t for t in iter(list(depdict.items())) if t[1] == []]
         # find the values that are not keys
-        valnotkey = set(flatten(iter(depdict.values()))) - set(depdict.keys())
+        valnotkey = set(flatten(iter(list(depdict.values())))) - set(depdict.keys())
 
         candidates = set([k[0] for k in keynoval]) | valnotkey
         for c in candidates:
@@ -120,7 +120,7 @@ def topsort(depdict):
                 found += 1
                 out[c] = curlevel
 
-        for k in depdict.keys():
+        for k in list(depdict.keys()):
             if depdict[k] != []:
                 newdepdict[k] = [v for v in depdict[k] if v not in valnotkey]
         # newdepdict = dict(newdepdict)
@@ -152,14 +152,14 @@ def topsort_modules(conf):
     missing = set(module_dict.keys()) - set(depdict.keys())
     inverted = dict()
     if len(missing) > 0:
-        for k in depdict.keys():
+        for k in list(depdict.keys()):
             for v in depdict[k]:
                 if v not in inverted:
                     inverted[v] = set()
                 inverted[v].add(k)
         print("configyml : ERROR : required modules missing from Modules.yml: ") 
         for m in missing:
-            print("    " + m + " (required by " + str(list(inverted[m])) + ")")
+            print(("    " + m + " (required by " + str(list(inverted[m])) + ")"))
         exit(2)
     conf['modules'] = sorted(conf['modules'], key=lambda m:module_dict[m['name']])
     return conf
