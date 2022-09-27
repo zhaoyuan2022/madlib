@@ -272,7 +272,7 @@ CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.train_test_split(
   separate_output_tables BOOLEAN
 ) RETURNS VOID AS $$
     PythonFunction(sample, train_test_split, train_test_split)
-$$ LANGUAGE plpython3u VOLATILE
+$$ LANGUAGE plpython2u VOLATILE
 m4_ifdef(`\_\_HAS_FUNCTION_PROPERTIES\_\_', `MODIFIES SQL DATA', `');
 
 -------------------------------------------------------------------------------
@@ -334,7 +334,7 @@ CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.train_test_split(
     message VARCHAR
 ) RETURNS VARCHAR AS $$
     PythonFunction(sample, train_test_split, train_test_split_help)
-$$ LANGUAGE plpython3u IMMUTABLE
+$$ LANGUAGE plpython2u IMMUTABLE
 m4_ifdef(`\_\_HAS_FUNCTION_PROPERTIES\_\_', `CONTAINS SQL', `');
 
 -------------------------------------------------------------------------------

@@ -229,7 +229,7 @@ CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.graph_closeness(
     vertex_filter_expr TEXT
 ) RETURNS VOID AS $$
     PythonFunction(graph, measures, graph_closeness)
-$$ LANGUAGE plpython3u VOLATILE
+$$ LANGUAGE plpython2u VOLATILE
 m4_ifdef(`__HAS_FUNCTION_PROPERTIES__', `MODIFIES SQL DATA', `');
 -------------------------------------------------------------------------------
 
@@ -247,7 +247,7 @@ CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.graph_closeness(
     message VARCHAR
 ) RETURNS VARCHAR AS $$
     PythonFunction(graph, measures, graph_closeness_help)
-$$ LANGUAGE plpython3u IMMUTABLE
+$$ LANGUAGE plpython2u IMMUTABLE
 m4_ifdef(`\_\_HAS_FUNCTION_PROPERTIES\_\_', `CONTAINS SQL', `');
 
 --------------------------------------------------------------------------------
@@ -410,7 +410,7 @@ CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.graph_diameter(
     out_table TEXT
 ) RETURNS VOID AS $$
     PythonFunction(graph, measures, graph_diameter)
-$$ LANGUAGE plpython3u VOLATILE
+$$ LANGUAGE plpython2u VOLATILE
 m4_ifdef(`__HAS_FUNCTION_PROPERTIES__', `MODIFIES SQL DATA', `');
 -------------------------------------------------------------------------------
 
@@ -419,7 +419,7 @@ CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.graph_diameter(
     message VARCHAR
 ) RETURNS VARCHAR AS $$
     PythonFunction(graph, measures, graph_diameter_help)
-$$ LANGUAGE plpython3u IMMUTABLE
+$$ LANGUAGE plpython2u IMMUTABLE
 m4_ifdef(`\_\_HAS_FUNCTION_PROPERTIES\_\_', `CONTAINS SQL', `');
 
 --------------------------------------------------------------------------------
@@ -586,7 +586,7 @@ CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.graph_avg_path_length(
     out_table TEXT
 ) RETURNS VOID AS $$
     PythonFunction(graph, measures, graph_avg_path_length)
-$$ LANGUAGE plpython3u VOLATILE
+$$ LANGUAGE plpython2u VOLATILE
 m4_ifdef(`__HAS_FUNCTION_PROPERTIES__', `MODIFIES SQL DATA', `');
 -------------------------------------------------------------------------------
 
@@ -595,7 +595,7 @@ CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.graph_avg_path_length(
     message VARCHAR
 ) RETURNS VARCHAR AS $$
     PythonFunction(graph, measures, graph_avg_path_length_help)
-$$ LANGUAGE plpython3u IMMUTABLE
+$$ LANGUAGE plpython2u IMMUTABLE
 m4_ifdef(`\_\_HAS_FUNCTION_PROPERTIES\_\_', `CONTAINS SQL', `');
 
 --------------------------------------------------------------------------------
@@ -786,7 +786,7 @@ CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.graph_vertex_degrees(
     grouping_cols           TEXT
 ) RETURNS VOID AS $$
     PythonFunction(graph, measures, graph_vertex_degrees)
-$$ LANGUAGE plpython3u VOLATILE
+$$ LANGUAGE plpython2u VOLATILE
 m4_ifdef(`__HAS_FUNCTION_PROPERTIES__', `MODIFIES SQL DATA', `');
 -------------------------------------------------------------------------------
 
@@ -807,7 +807,7 @@ CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.graph_vertex_degrees(
     message VARCHAR
 ) RETURNS VARCHAR AS $$
     PythonFunction(graph, measures, graph_vertex_degrees_help)
-$$ LANGUAGE plpython3u IMMUTABLE
+$$ LANGUAGE plpython2u IMMUTABLE
 m4_ifdef(`\_\_HAS_FUNCTION_PROPERTIES\_\_', `CONTAINS SQL', `');
 
 --------------------------------------------------------------------------------

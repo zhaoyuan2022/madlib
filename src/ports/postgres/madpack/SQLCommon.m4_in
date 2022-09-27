@@ -18,7 +18,7 @@ m4_changequote(<!,!>)
  *
  * @param $1 python statement which might raise an exception
  *
- * Use this macro in the sql definition of a plpython3u function
+ * Use this macro in the sql definition of a plpython2u function
  *   that runs on the segments.  If the function raises an exception,
  *   traceback information will be attached to the exception message
  *   which gets forwarded back to the coordinator.
@@ -68,7 +68,7 @@ m4_define(<!WithTracebackForwarding!>, <!
  *     "indepColumn" VARCHAR)
  * RETURNS DOUBLE PRECISION[]
  * AS $$PythonFunction(regress, logistic, compute_logregr_coef)$$
- * LANGUAGE plpython3u VOLATILE;
+ * LANGUAGE plpython2u VOLATILE;
  */
 m4_define(<!PythonFunction!>, <!
     import sys
