@@ -1173,7 +1173,7 @@ RETURNS SETOF MADLIB_SCHEMA.lda_result AS $$
     return [[
         output_table,
         'per-doc topic distribution and per-word topic assignments']]
-$$ LANGUAGE PLPYTHONU STRICT
+$$ LANGUAGE PLPYTHON2U STRICT
 m4_ifdef(`__HAS_FUNCTION_PROPERTIES__', `MODIFIES SQL DATA', `');
 
 /**
