@@ -63,6 +63,7 @@ function(determine_target_versions OUT_VERSIONS)
             list(APPEND ${OUT_VERSIONS} ${VERSION})
         endif()
     endforeach(VERSION)
+
     if(NOT DEFINED ${OUT_VERSIONS})
         find_package(${PORT})
         if(${PORT_UC}_FOUND)
@@ -87,7 +88,7 @@ function(determine_target_versions OUT_VERSIONS)
                 # Starting Postgresql 10, semantic versioning will be followed,
                 # implying we only need 1 folder for same major versions
                 set(VERSION ${${PORT_UC}_VERSION_MAJOR})
-	elseif(${PORT_UC} STREQUAL "PIECLOUDDB" AND
+	    elseif(${PORT_UC} STREQUAL "PIECLOUDDB" AND
                     (${${PORT_UC}_VERSION_MAJOR} EQUAL 1 OR
                     ${${PORT_UC}_VERSION_MAJOR} GREATER 1))
                 # Starting  piedlouddb 1, semantic versioning will be followed,
