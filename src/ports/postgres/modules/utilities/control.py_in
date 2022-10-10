@@ -243,6 +243,7 @@ class AOControl(ContextDecorator):
         Example:
              appendonly=false,blocksize=32768,compresstype=none,checksum=true,orientation=row
         """
+    # TODO: unsuppoted option
     #    self.storage_options_dict = extract_keyvalue_params(gp_default_storage_options_str)
     #    self.storage_options_dict['appendonly'] = bool(
     #        strtobool(self.storage_options_dict['appendonly']))
