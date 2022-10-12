@@ -230,6 +230,7 @@ SystemInformation::functionInformation(Oid inFuncID) {
         cachedFuncInfo = static_cast<FunctionInformation*>(
             madlib_hash_search(functions, &inFuncID, HASH_ENTER, &found));
         // cachedFuncInfo.oid is already set
+	cachedFuncInfo->oid = inFuncID;
         cachedFuncInfo->mSysInfo = this;
         tup = madlib_SearchSysCache1(PROCOID, ObjectIdGetDatum(inFuncID));
         if (!HeapTupleIsValid(tup)) {
