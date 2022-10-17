@@ -15,7 +15,7 @@ CREATE TABLE patients (
     second_attack INTEGER,
     treatment INTEGER,
     trait_anxiety INTEGER
-)m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)');
+)m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY');
 
 INSERT INTO patients(ID, second_attack, treatment, trait_anxiety) VALUES
 ( 0, NULL, 1, 70),
@@ -176,7 +176,7 @@ CREATE TABLE crime (
     Unemp2  INTEGER,
     Median  INTEGER,
     BelowMed INTEGER
-)m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)');
+)m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY');
 
 INSERT INTO crime(
     CrimeRat, MaleTeen, South, Educ, Police60, Police59, Labor, Males, Pop,
@@ -269,7 +269,7 @@ CREATE TABLE grad_school (
     gre INTEGER,
     gpa DOUBLE PRECISION,
     rank INTEGER
-)m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)');
+)m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY');
 
 COPY grad_school (admit, gre, gpa, rank) FROM STDIN;
 0	380	3.61	3

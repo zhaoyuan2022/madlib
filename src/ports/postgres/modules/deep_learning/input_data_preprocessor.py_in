@@ -310,7 +310,6 @@ class InputDataPreprocessorDL(object):
                 COUNT(*) AS count
             FROM {normalized_tbl}
             GROUP BY buffer_id
-            {{dist_by_buffer_id}}
         """.format(**locals())
 
         # This query template will be used later in pg & gp specific code paths,
@@ -322,7 +321,6 @@ class InputDataPreprocessorDL(object):
                 {shape_sql},
                 buffer_id
             FROM {batched_table}
-            {{dist_by_dist_key}}
         """.format(**locals())
 
         if is_platform_pg():
@@ -443,7 +441,6 @@ class InputDataPreprocessorDL(object):
         query = """
             CREATE TEMP TABLE {series_tbl} AS
                 SELECT generate_series(0, 999999) {dist_key_col}
-                DISTRIBUTED BY ({dist_key_col})
             """.format(**locals())
 
         plpy.execute(query)
@@ -461,7 +458,6 @@ class InputDataPreprocessorDL(object):
                 SELECT min({dist_key_col}) AS {dist_key_col}
                 FROM {series_tbl}
                 GROUP BY gp_segment_id
-                DISTRIBUTED BY ({dist_key_col})
         """.format(**locals())
 
         plpy.execute(dist_key_query)
@@ -491,7 +487,6 @@ class InputDataPreprocessorDL(object):
             FROM {self.source_table} s JOIN {dist_key_tbl} AS d
                 ON (s.gp_segment_id = d.gp_segment_id)
             {order_by_clause}
-            DISTRIBUTED BY ({dist_key_col})
         """.format(**locals())
         plpy.execute(one_hot_sql)
 
@@ -507,7 +502,6 @@ class InputDataPreprocessorDL(object):
                 {dist_key_col}
             FROM {norm_tbl}
             GROUP BY {dist_key_col}
-            DISTRIBUTED BY ({dist_key_col})
         """.format(**locals())
 
         plpy.execute(sql)
@@ -527,7 +521,6 @@ class InputDataPreprocessorDL(object):
                 {dist_key_col},
                 SUM(rows_per_seg) OVER (ORDER BY gp_segment_id) - rows_per_seg AS start_row
             FROM {rows_per_seg_tbl}
-            DISTRIBUTED BY ({dist_key_col})
         """.format(**locals())
 
         plpy.execute(sql)
@@ -571,7 +564,6 @@ class InputDataPreprocessorDL(object):
         FROM {norm_tbl} JOIN {start_rows_tbl}
             USING ({dist_key_col})
         ORDER BY buffer_id
-        DISTRIBUTED BY (slot_id)
         """.format(**locals())
 
         plpy.execute(sql)   # label buffer_id's
@@ -624,7 +616,6 @@ class InputDataPreprocessorDL(object):
                         FROM {batched_table} t
                             JOIN {dist_key_tbl} d
                                 ON {join_key} = d.gp_segment_id
-                            DISTRIBUTED BY ({dist_key_col})
               """.format(**locals())
 
         # match buffer_id's with dist_keys
