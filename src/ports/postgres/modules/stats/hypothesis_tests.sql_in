@@ -1075,9 +1075,8 @@ m4_ifdef(<!__HAS_FUNCTION_PROPERTIES__!>, <!NO SQL!>, <!!>);
  *     (<tt>ORDER BY \em value</tt>) and will raise an exception if values are
  *     not ordered.
  */
-m4_ifdef(<!__HAS_ORDERED_AGGREGATES__!>,<!
 CREATE
-m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!ORDERED!>)
+m4_ifdef(`__POSTGRESQL__', `', m4_ifdef(`__HAS_ORDERED_AGGREGATES__', `ORDERED'))
 AGGREGATE MADLIB_SCHEMA.ks_test(
     /*+ "first" */ BOOLEAN,
     /*+ "value" */ DOUBLE PRECISION,
@@ -1089,7 +1088,6 @@ AGGREGATE MADLIB_SCHEMA.ks_test(
     FINALFUNC=MADLIB_SCHEMA.ks_test_final,
     INITCOND='{0,0,0,0,0,0,0}'
 );
-!>)
 
 CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.mw_test_transition(
     state DOUBLE PRECISION[],
@@ -1164,9 +1162,8 @@ m4_ifdef(<!__HAS_FUNCTION_PROPERTIES__!>, <!NO SQL!>, <!!>);
  *     (<tt>ORDER BY \em value</tt>) and will raise an exception if values are
  *     not ordered.
  */
-m4_ifdef(<!__HAS_ORDERED_AGGREGATES__!>,<!
 CREATE
-m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!ORDERED!>)
+m4_ifdef(`__POSTGRESQL__', `', m4_ifdef(`__HAS_ORDERED_AGGREGATES__', `ORDERED'))
 AGGREGATE MADLIB_SCHEMA.mw_test(
     /*+ "first" */ BOOLEAN,
     /*+ "value" */ DOUBLE PRECISION
@@ -1176,7 +1173,6 @@ AGGREGATE MADLIB_SCHEMA.mw_test(
     FINALFUNC=MADLIB_SCHEMA.mw_test_final,
     INITCOND='{0,0,0,0,0,0,0}'
 );
-!>)
 
 CREATE OR REPLACE FUNCTION MADLIB_SCHEMA.wsr_test_transition(
     state DOUBLE PRECISION[],
@@ -1291,9 +1287,8 @@ m4_ifdef(<!__HAS_FUNCTION_PROPERTIES__!>, <!NO SQL!>, <!!>);
  *     (<tt>ORDER BY abs(\em value</tt>)) and will raise an exception if the
  *     absolute values are not ordered.
  */
-m4_ifdef(<!__HAS_ORDERED_AGGREGATES__!>,<!
 CREATE
-m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!ORDERED!>)
+m4_ifdef(`__POSTGRESQL__', `', m4_ifdef(`__HAS_ORDERED_AGGREGATES__', `ORDERED'))
 AGGREGATE MADLIB_SCHEMA.wsr_test(
     /*+ "value" */ DOUBLE PRECISION,
     /*+ "precision" */ DOUBLE PRECISION /*+ DEFAULT -1 */
@@ -1303,11 +1298,9 @@ AGGREGATE MADLIB_SCHEMA.wsr_test(
     FINALFUNC=MADLIB_SCHEMA.wsr_test_final,
     INITCOND='{0,0,0,0,0,0,0,0,0}'
 );
-!>)
 
-m4_ifdef(<!__HAS_ORDERED_AGGREGATES__!>,<!
 CREATE
-m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!ORDERED!>)
+m4_ifdef(`__POSTGRESQL__', `', m4_ifdef(`__HAS_ORDERED_AGGREGATES__', `ORDERED'))
 AGGREGATE MADLIB_SCHEMA.wsr_test(
     /*+ value */ DOUBLE PRECISION
 ) (
@@ -1316,7 +1309,6 @@ AGGREGATE MADLIB_SCHEMA.wsr_test(
     FINALFUNC=MADLIB_SCHEMA.wsr_test_final,
     INITCOND='{0,0,0,0,0,0,0,0,0}'
 );
-!>)
 
 DROP TYPE IF EXISTS MADLIB_SCHEMA.one_way_anova_result CASCADE;
 CREATE TYPE MADLIB_SCHEMA.one_way_anova_result AS (
