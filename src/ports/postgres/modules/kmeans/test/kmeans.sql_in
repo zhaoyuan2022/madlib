@@ -10,7 +10,7 @@ CREATE TABLE kmeans_2d(
 	x DOUBLE PRECISION,
 	y DOUBLE PRECISION,
 	position DOUBLE PRECISION[]
-) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)');
+);
 
 INSERT INTO kmeans_2d(x, y, position)
 SELECT

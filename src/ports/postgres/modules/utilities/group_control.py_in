@@ -102,9 +102,6 @@ class GroupIterationController:
                     from {rel_source}
                     group by {groupby_str}
                 );
-                m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!
-                alter table {rel_state} set distributed by ({col_grp_iteration} {primary_str});
-                !>)
                 """.format(group_col=group_col, groupby_str=groupby_str, primary_str=primary_str,
                            temp='TEMPORARY' if self.temporaryTables else '', **self.kwargs))
             null_test = " or ".join([g.strip() + " is NULL" for g in

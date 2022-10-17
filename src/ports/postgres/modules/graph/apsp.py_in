@@ -252,12 +252,13 @@ def graph_apsp(schema_madlib, vertex_table, vertex_id, edge_table,
 
         # GPDB has distributed by clauses to help them with indexing.
         # For Postgres we add the indices manually.
-        if is_platform_pg():
-            sql_index = "CREATE INDEX ON {0}({1})".format(out_table, src)
-        else:
-            sql_index = ''
+        # PIECLOUDDB does not support create index on ostore table
+        #if is_platform_pg():
+        #    sql_index = "CREATE INDEX ON {0}({1})".format(out_table, src)
+        #else:
+        #    sql_index = ''
 
-        plpy.execute(sql_index)
+        #plpy.execute(sql_index)
 
         # The source can be reached with 0 cost and next is itself.
         plpy.execute(

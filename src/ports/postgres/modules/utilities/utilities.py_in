@@ -152,12 +152,7 @@ def get_distributed_by(source_table):
             LEFT OUTER JOIN pg_attribute pga
             ON distkey.attnum = pga.attnum AND distkey.localoid = pga.attrelid
         """.format(table_name=table_name, schema_name=schema_name))[0]["dist_attr"]
-        if len(dist_attr) > 0:
-            dist_str = 'distributed by (' + ','.join(['"%s"' % i
-                                                      for i in dist_attr
-                                                      if i is not None]) + ')'
-        else:
-            dist_str = 'distributed randomly'
+        dist_str = 'distributed randomly'
     else:
         dist_str = plpy.execute("""
         SELECT pg_catalog.pg_get_table_distributedby(pgc.oid) as distributedby

@@ -16,7 +16,7 @@ CREATE TABLE leukemia (
     wbc DOUBLE PRECISION,
     timedeath INTEGER,
     status BOOLEAN
-)m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!DISTRIBUTED BY (id)!>);
+);
 
 
 INSERT INTO leukemia(id, grp, wbc, timedeath,status) VALUES
@@ -100,7 +100,7 @@ CREATE TABLE leukemia (
     wbc DOUBLE PRECISION,
     timedeath INTEGER,
     status BOOLEAN
-)m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!DISTRIBUTED BY (id)!>);
+);
 
 INSERT INTO leukemia(id, grp, wbc, timedeath, status) VALUES
 (1,0,1.45,35,TRUE),

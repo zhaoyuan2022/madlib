@@ -15,7 +15,7 @@ CREATE TABLE weibull (
     x1 DOUBLE PRECISION,
     x2 DOUBLE PRECISION,
     y DOUBLE PRECISION
-) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)');
+) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY');
 
 /*
  * We materialize the table here because on MPP systems we want to distribute
@@ -101,7 +101,7 @@ CREATE TABLE patients (
     second_attack INTEGER,
     treatment INTEGER,
     trait_anxiety INTEGER
-) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)');
+) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY');
 INSERT INTO patients(ID, second_attack, treatment, trait_anxiety) VALUES
 ( 1, 1, 1, 70),
 ( 2, 1, 1, 80),
