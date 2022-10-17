@@ -13,7 +13,7 @@ def vcrf_top1_table(schema_madlib, segment_tbl, label_tbl, resulttbl_raw, result
             SELECT doc_id, count(*) -1 max_pos
             FROM {segment_tbl}
             GROUP BY doc_id
-        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (doc_id)')
+        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY')
         """.format(seg_count_tbl = seg_count_tbl,
                    segment_tbl = segment_tbl))
 
@@ -42,13 +42,13 @@ def vcrf_label(schema_madlib, segment_tbl, factor_mtbl, factor_rtbl, label_tbl, 
 
     plpy.execute("""DROP TABLE IF EXISTS """ + m_factors + """,""" + r_factors + """,""" + segment_tbl_digits  + """,""" + resulttbl_raw + """;""")
     plpy.execute("""CREATE TABLE """ + resulttbl_raw + """(doc_id integer, label integer[])
-                   m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (doc_id)')""")
+                   m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY')""")
 
 
     # replace digits with "DIGIT" keyword
     plpy.execute("""CREATE TABLE """ + segment_tbl_digits + """ AS SELECT start_pos, doc_id, seg_text FROM """ + segment_tbl + """ WHERE
 			NOT (seg_text ~ E'^[-+]?([0-9]{1,3}[,]?)*[0-9]{1,3}$' OR seg_text ~ E'^[-+]?[0-9]*[.][0-9]+$')
-                m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (doc_id)')""")
+                m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY)')""")
     plpy.execute("""INSERT INTO """ + segment_tbl_digits + """ SELECT start_pos,doc_id,'DIGIT' FROM """ + segment_tbl + """ WHERE
 		    seg_text ~ E'^[-+]?([0-9]{1,3}[,]?)*[0-9]{1,3}$' OR seg_text ~E'^[-+]?[0-9]*[.][0-9]+$';""")
 

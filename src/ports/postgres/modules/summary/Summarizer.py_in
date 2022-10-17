@@ -374,7 +374,7 @@ class Summarizer:
         """
         if create_table:
             final_query += """
-                m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (group_by)')"""
+                m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY')"""
 
         return final_query.format(
             output_table=self._output_table,

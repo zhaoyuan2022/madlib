@@ -320,8 +320,7 @@ $$
             ARRAY{data_distribution_per_seg} AS segments_per_host,
             __dist_key__
         FROM {fm.source_table}
-        GROUP BY __dist_key__
-        DISTRIBUTED BY (__dist_key__);
+        GROUP BY __dist_key__;
     """.format(
             fm=fit_mult,
             data_distribution_per_seg=data_distribution_per_seg,
@@ -402,8 +401,7 @@ SELECT load_model_selection_table(
 SELECT init_fit_mult('iris_data_15buf_packed', 'iris_mst_table');
 
 CREATE TABLE src_3segs AS
-    SELECT * FROM iris_data_15buf_packed
-    DISTRIBUTED BY (__dist_key__);
+    SELECT * FROM iris_data_15buf_packed;
 
 -- Simulate 6 models on 3 segments --
 SELECT update_dist_keys('src_3segs', 3, 6, 'expected_dist_key_mappings');
@@ -459,8 +457,8 @@ SELECT test_run_training('src_3segs', 0, False, False, False);
             False              -- use_caching
         ) AS res,
         s.__dist_key__
-    FROM expected_dist_key_mappings s
-    DISTRIBUTED BY (__dist_key__);
+    FROM expected_dist_key_mappings s;
+    
     SELECT assert(res = 'PASS', res) FROM validate_params_results;
 
 --=== Test an ordinary hop - no caching (# msts > # segs) ===--
@@ -487,8 +485,7 @@ SELECT test_rotate_schedule('current_schedule');
             False              -- use_caching
         ) AS res,
         s.__dist_key__
-    FROM expected_dist_key_mappings s
-    DISTRIBUTED BY (__dist_key__);
+    FROM expected_dist_key_mappings s;
     SELECT assert(res = 'PASS', res) FROM validate_params_results;
 
 --=== Test final training hop - no caching (# msts > # segs) ===--
@@ -514,8 +511,7 @@ SELECT test_run_training('src_3segs', 8, False, True, False);
             False              -- use_caching
         ) AS res,
         s.__dist_key__
-    FROM expected_dist_key_mappings s
-    DISTRIBUTED BY (__dist_key__);
+    FROM expected_dist_key_mappings s;
     SELECT assert(res = 'PASS', res) FROM validate_params_results;
 
 --=== Test very first hop - caching enabled   ( # msts > # segs ) ===--
@@ -540,8 +536,7 @@ SELECT test_run_training('src_3segs', 0, True, False, True);
             True                -- use_caching
         ) AS res,
         s.__dist_key__
-    FROM expected_dist_key_mappings s
-    DISTRIBUTED BY (__dist_key__);
+    FROM expected_dist_key_mappings s;
     SELECT assert(res = 'PASS', res) FROM validate_params_results;
 
     -- validate that cached source table was created with proper dist keys
@@ -572,8 +567,7 @@ SELECT test_run_training('src_3segs', 7, False, False, True);
             True               -- use_caching
         ) AS res,
         s.__dist_key__
-    FROM expected_dist_key_mappings s
-    DISTRIBUTED BY (__dist_key__);
+    FROM expected_dist_key_mappings s;
     SELECT assert(res = 'PASS', res) FROM validate_params_results;
 
 -- Test final training hop - caching enabled   ( # msts > # segs )
@@ -598,8 +592,7 @@ SELECT test_run_training('src_3segs', 2, False, True, True);
             True               -- use_caching
         ) AS res,
         s.__dist_key__
-    FROM expected_dist_key_mappings s
-    DISTRIBUTED BY (__dist_key__);
+    FROM expected_dist_key_mappings s;
     SELECT assert(res = 'PASS', res) FROM validate_params_results;
 
 --=== Simulate 3 models on 3 segments ===--
@@ -649,15 +642,13 @@ SELECT test_run_training('src_3segs', 2, False, False, False);
             False               -- use_caching
         ) AS res,
         s.__dist_key__
-    FROM expected_dist_key_mappings s
-    DISTRIBUTED BY (__dist_key__);
+    FROM expected_dist_key_mappings s;
     SELECT assert(res = 'PASS', res) FROM validate_params_results;
 
 --=== Simulate 3 models on 5 segments ( # msts < # segs ) ===--
 --      ( by updating dist keys in source table )
 CREATE TABLE src_5segs AS
-    SELECT * FROM iris_data_15buf_packed
-    DISTRIBUTED BY (__dist_key__);
+    SELECT * FROM iris_data_15buf_packed;
 
 SELECT update_dist_keys('src_5segs', 5, 3, 'expected_dist_key_mappings');
 SELECT test_init_schedule('current_schedule');
@@ -712,8 +703,7 @@ SELECT test_rotate_schedule('current_schedule');
             True                -- use_caching
         ) AS res,
         s.__dist_key__
-    FROM expected_dist_key_mappings s
-    DISTRIBUTED BY (__dist_key__);
+    FROM expected_dist_key_mappings s;
     SELECT assert(res = 'PASS', res) FROM validate_params_results;
 
 -- Test ordinary hop - caching enabled   ( # msts < # segs )
@@ -743,8 +733,7 @@ SELECT test_run_training('src_5segs', 1, False, False, True);
             True               -- use_caching
         ) AS res,
         s.__dist_key__  -- WHERE clause restricts this check to segments with models
-    FROM expected_dist_key_mappings s WHERE ARRAY[__dist_key__] <@ ARRAY(SELECT __dist_key__ FROM current_schedule WHERE mst_key IS NOT NULL)
-    DISTRIBUTED BY (__dist_key__);
+    FROM expected_dist_key_mappings s WHERE ARRAY[__dist_key__] <@ ARRAY(SELECT __dist_key__ FROM current_schedule WHERE mst_key IS NOT NULL);
     SELECT assert(res = 'PASS', res) FROM validate_params_results;
 
     SELECT test_rotate_schedule('current_schedule');
@@ -776,8 +765,7 @@ SELECT test_run_training('src_5segs', 5, False, True, True);
             True               -- use_caching
         ) AS res,
         s.__dist_key__
-    FROM expected_dist_key_mappings s
-    DISTRIBUTED BY (__dist_key__);
+    FROM expected_dist_key_mappings s;
     SELECT assert(res = 'PASS', res) FROM validate_params_results;
 
 -- We don't want to hide the madlib versions of these for any other

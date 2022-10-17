@@ -163,7 +163,7 @@ def graph_bfs(schema_madlib, vertex_table, vertex_id, edge_table,
         dest = edge_params["dest"]
 
         distribution = m4_ifdef(<!__POSTGRESQL__!>, <!''!>,
-            <!"DISTRIBUTED BY ({0})".format(vertex_id)!>)
+            <!"DISTRIBUTED RANDOMLY"!>)
         local_distribution = m4_ifdef(<!__POSTGRESQL__!>, <!''!>,
             <!"DISTRIBUTED RANDOMLY"!>)
 

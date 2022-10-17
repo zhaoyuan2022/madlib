@@ -107,10 +107,7 @@ class CategoricalEncoder(object):
             self._build_output_dictionary(distinct_values)
 
         if self._distributed_by:
-            if self._distributed_by[0].lower() == 'randomly':
-                distribution_str = 'DISTRIBUTED RANDOMLY'
-            else:
-                distribution_str = 'DISTRIBUTED BY ({0})'.format(', '.join(self._distributed_by))
+            distribution_str = 'DISTRIBUTED RANDOMLY'
         else:
             distribution_str = ''
 

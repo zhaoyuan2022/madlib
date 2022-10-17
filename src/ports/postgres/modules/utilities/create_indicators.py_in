@@ -94,11 +94,8 @@ def create_indicator_variables(schema_madlib, source_table, out_table,
         sql_list.append(" FROM " + source_table + ") ")
 
         if not is_postgresql:
-            if distributed_by:
-                dist_str = 'distributed by (' + distributed_by + ')'
-            else:
-                dist_str = get_distributed_by(source_table)
-		sql_list.append(dist_str)
+            dist_str = 'distributed randomly'
+	    sql_list.append(dist_str)
         plpy.execute(''.join(sql_list))
         return None
 # ---------------------------------------------------------------

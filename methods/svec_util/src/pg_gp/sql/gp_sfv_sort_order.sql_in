@@ -4,7 +4,7 @@ CREATE TEMP TABLE dictionary (
     rank bigint,
     term text,
     count bigint
-) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (rank)');
+);
 
 
 COPY dictionary (rank, term, count) FROM stdin with DELIMITER AS ',';

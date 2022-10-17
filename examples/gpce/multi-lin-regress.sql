@@ -5,7 +5,7 @@
 \qecho === Refresh table: houses =======================================
 
 DROP TABLE IF EXISTS houses;
-CREATE TABLE houses (id INT, tax INT, bedroom INT, bath FLOAT, price INT, size INT, lot INT) distributed by (ID);
+CREATE TABLE houses (id INT, tax INT, bedroom INT, bath FLOAT, price INT, size INT, lot INT);
 
 COPY houses FROM STDIN DELIMITER '|';
   1 |  590 |       2 |    1 |  50000 |  770 | 22100

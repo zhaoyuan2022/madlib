@@ -243,12 +243,13 @@ def graph_sssp(schema_madlib, vertex_table, vertex_id, edge_table,
 
             # GPDB has distributed by clauses to help them with indexing.
             # For Postgres we add the indices manually.
-            if is_platform_pg():
-                plpy.execute("""
-                    CREATE INDEX ON {out_table} ({vertex_id});
-                    CREATE INDEX ON {oldupdate} (id);
-                    CREATE INDEX ON {newupdate} (id);
-                """.format(**locals()))
+            # PIECLOUDDB does not support create index on ostore table
+            #if is_platform_pg():
+            #    plpy.execute("""
+            #        CREATE INDEX ON {out_table} ({vertex_id});
+            #        CREATE INDEX ON {oldupdate} (id);
+            #        CREATE INDEX ON {newupdate} (id);
+            #    """.format(**locals()))
 
             # The initialization step is quite different when grouping is involved
             # since not every group (subgraph) will have the same set of vertices.
