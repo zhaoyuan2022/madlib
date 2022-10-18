@@ -138,8 +138,7 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
             lift        FLOAT8,
             conviction  FLOAT8
             )
-        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (ruleId)')""".format(output_schema)
-        );
+        """.format(output_schema));
 
     # the auxiliary table for keeping the association rules
     assoc_rules_aux_tmp = unique_string('assoc_rules_aux_tmp')
@@ -154,7 +153,6 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
             lift        FLOAT8,
             conviction  FLOAT8
             )
-        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (ruleId)')
         """.format(assoc_rules_aux_tmp));
 
     # if the tid in the input table doesn't start with 1 and the IDs are not
@@ -178,7 +176,6 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
                       {4}  IS NOT NULL
                 GROUP BY 1,2
              ) t
-             m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (tid)')
              """.format(tid_col, item_col, input_table, tid_col, item_col,
                         assoc_input_unique)
              );
@@ -212,7 +209,6 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
            GROUP BY item
         ) t
         WHERE cnt::FLOAT8 >= {min_supp_tranx}
-        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (item_id)')
         """.format(**locals()));
 
     if verbose :
@@ -227,7 +223,6 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
          SELECT t1.tid, t2.item_id, t2.cnt
          FROM {assoc_input_unique} t1, {assoc_item_uniq} t2
          WHERE t1.item = t2.item_text
-         m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (tid)')
          """.format(**locals()));
 
     if verbose :
@@ -247,7 +242,6 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
             support     FLOAT8,
             iteration   INT
             )
-        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (text_svec)')
         """.format(**locals()));
 
     # this table keeps the patterns in the current iteration.
@@ -260,7 +254,6 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
             support     FLOAT8,
             tids        {madlib_schema}.svec
             )
-        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)')
         """.format(**locals()));
 
     # this table adds a new column to order the table by its setlist
@@ -274,7 +267,6 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
             tids        {madlib_schema}.svec,
             newrownum   BIGINT
             )
-        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (newrownum)')
         """.format(**locals()));
 
     plpy.execute("""
@@ -320,7 +312,6 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
             support         FLOAT8,
             tids            {madlib_schema}.svec
             )
-         m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)')
          """.format(**locals()));
 
     if verbose  :
@@ -511,7 +502,6 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
                 ) s1, {assoc_item_uniq} s2
              WHERE s1.pre_id = s2.item_id
              GROUP BY ruleId
-             m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (ruleId)')
              """.format(**locals()));
 
         post_tmp_table = unique_string('post_tmp_table')
@@ -527,7 +517,6 @@ def assoc_rules(madlib_schema, support, confidence, tid_col,
                 ) s1, {assoc_item_uniq} s2
              WHERE s1.post_id = s2.item_id
              GROUP BY ruleId
-             m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (ruleId)')
              """.format(**locals()));
 
         plpy.execute("""

@@ -11,4 +11,4 @@ greenplum:
     name:   Greenplum DB
 
 pieclouddb:
-    name:   PieCloudDB 
+    name:   PieCloudDB

@@ -706,16 +706,14 @@ def create_prepared_data(**kwargs):
             DROP TABLE IF EXISTS {attrCountsSource};
             CREATE TEMPORARY TABLE {attrCountsSource}
             AS
-            {attr_counts_sql}
-            m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (attr)');
+            {attr_counts_sql};
             ALTER TABLE {attrCountsSource} ADD PRIMARY KEY (attr);
             ANALYZE {attrCountsSource};
 
             DROP TABLE IF EXISTS {attrValuesSource};
             CREATE TEMPORARY TABLE {attrValuesSource}
             AS
-            {attr_values_sql}
-            m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (attr, value)');
+            {attr_values_sql};
 
             ALTER TABLE {attrValuesSource} ADD PRIMARY KEY (attr, value);
             ANALYZE {attrValuesSource};
@@ -734,8 +732,7 @@ def create_prepared_data(**kwargs):
     plpy.execute("""
         CREATE {whatToCreate} {classPriorsDestName}
         AS
-        {sql}
-        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (class)');
+        {sql};
         """.format(**kwargs)
         )
     if kwargs['whatToCreate'] == 'TABLE':
@@ -756,8 +753,7 @@ def create_prepared_data(**kwargs):
         plpy.execute("""
             CREATE {whatToCreate} {numericFeatureStatsDestName}
             AS
-            {sql}
-            m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (class, attr)');
+            {sql};
             """.format(
                 whatToCreate = kwargs['whatToCreate'],
                 numericFeatureStatsDestName = kwargs['numericFeatureStatsDestName'],
@@ -777,8 +773,7 @@ def create_prepared_data(**kwargs):
     plpy.execute("""
         CREATE {whatToCreate} {featureProbsDestName}
         AS
-        {sql}
-        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (class, attr, value)');
+        {sql};
         """.format(**kwargs)
         )
 

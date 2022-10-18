@@ -16,7 +16,7 @@ CREATE TABLE patients (
     "SECOND_ATTACK" INTEGER,
     treatment INTEGER,
     trait_anxiety INTEGER
-) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)');
+) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY');
 
 INSERT INTO patients(id, "SECOND_ATTACK", treatment, trait_anxiety) VALUES
 ( 1, 1, 1, 70),
@@ -379,7 +379,7 @@ CREATE TABLE patients_with_null (
     second_attack INTEGER,
     treatment INTEGER,
     trait_anxiety INTEGER
-) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)');
+) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY');
 INSERT INTO patients_with_null(ID, second_attack, treatment, trait_anxiety) VALUES
 ( 1, 1, 1, 70),
 ( 2, 1, 1, 80),
@@ -437,7 +437,7 @@ CREATE TABLE patients_all_null (
     second_attack INTEGER,
     treatment INTEGER,
     trait_anxiety INTEGER
-)m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)');
+)m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY');
 INSERT INTO patients_all_null(ID, second_attack, treatment, trait_anxiety) VALUES
 ( 1, NULL, 1, 70),
 ( 2, 1, 1, NULL),

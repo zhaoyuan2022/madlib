@@ -27,7 +27,7 @@ initializeOidHashTable(HTAB*& ioHashTable, MemoryContext inCacheContext,
         HASHCTL ctl;
         ctl.keysize = sizeof(Oid);
         ctl.entrysize = inEntrySize;
-        ctl.hash = oid_hash;
+       // ctl.hash = oid_hash;
         ctl.hcxt = inCacheContext;
         ioHashTable = madlib_hash_create(
             /* tabname -- a name for the table (for debugging purposes) */
@@ -37,7 +37,8 @@ initializeOidHashTable(HTAB*& ioHashTable, MemoryContext inCacheContext,
             /* info: additional table parameters, as indicated by flags */
             &ctl,
             /* flags -- bitmask indicating which parameters to take from *info */
-            HASH_ELEM | HASH_FUNCTION | HASH_CONTEXT
+            HASH_ELEM | HASH_CONTEXT
+           // HASH_ELEM | HASH_FUNCTION | HASH_CONTEXT
         );
     }
 }
@@ -229,6 +230,7 @@ SystemInformation::functionInformation(Oid inFuncID) {
         cachedFuncInfo = static_cast<FunctionInformation*>(
             madlib_hash_search(functions, &inFuncID, HASH_ENTER, &found));
         // cachedFuncInfo.oid is already set
+	cachedFuncInfo->oid = inFuncID;
         cachedFuncInfo->mSysInfo = this;
         tup = madlib_SearchSysCache1(PROCOID, ObjectIdGetDatum(inFuncID));
         if (!HeapTupleIsValid(tup)) {

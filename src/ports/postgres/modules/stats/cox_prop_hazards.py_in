@@ -523,8 +523,7 @@ def quick_split(
                     {source_table}
                 where {filter_null}
             ) table_split
-            group by {distid}
-            m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!DISTRIBUTED BY ({real_distid})!>);
+            group by {distid};
             """.format(
             output_table=output_table,
             schema_madlib=schema_madlib,
@@ -577,7 +576,6 @@ def quick_split(
             ) table_split
             group by {distid}, {strata}
             -- ensure that all chunks belonging to the same strata go to the same segment
-            m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!DISTRIBUTED BY ({strata})!>)
             """.format(
             output_table=output_table,
             schema_madlib=schema_madlib,
@@ -1040,7 +1038,6 @@ def _compute_residual(schema_madlib, source_table, output_table,
         ) AS q1
         WHERE status is TRUE
         ORDER BY {dep_column} ASC
-        m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!DISTRIBUTED BY ({dep_column})!>)
         """.format(**format_args))
 
     n_uncensored = plpy.execute("""SELECT count(*)::INTEGER as n_uncensored
@@ -1062,7 +1059,6 @@ def _compute_residual(schema_madlib, source_table, output_table,
             ) AS scaled_residual
         FROM
             {residual_table}
-        m4_ifdef(<!__POSTGRESQL__!>, <!!>, <!DISTRIBUTED BY ({dep_column})!>)
         """.format(output_residual=output_residual, **format_args))
 
     # plpy.info("--------- Computing metrics ---------")

@@ -262,7 +262,6 @@ class FitMultipleModel(object):
                                         {self.model_arch_col}::JSON,
                                         {self.dist_key_col}::INTEGER
                                     FROM {self.model_output_tbl}
-                                    DISTRIBUTED BY ({self.dist_key_col})
                                     """.format(self=self)
         plpy.execute(final_output_table_create_query)
         self.truncate_and_drop(self.model_output_tbl)
@@ -404,7 +403,6 @@ class FitMultipleModel(object):
                     map.{self.dist_key_col}
                 FROM map LEFT JOIN {self.model_selection_table}
                     USING ({self.mst_key_col})
-            DISTRIBUTED BY ({self.dist_key_col})
         """.format(self=self, mst_key_list=mst_key_list)
         plpy_execute(create_sched_query)
 
@@ -423,7 +421,6 @@ class FitMultipleModel(object):
                                 OVER(ORDER BY {self.dist_key_col})
                         ) AS {self.dist_key_col}
                     FROM {self.schedule_tbl}
-                DISTRIBUTED BY ({self.prev_dist_key_col})
             """.format(self=self)
             self.rotate_schedule_tbl_plan = plpy.prepare(rotate_schedule_tbl_query)
 
@@ -500,7 +497,6 @@ class FitMultipleModel(object):
                                      {self.dist_key_col} INTEGER,
                                      PRIMARY KEY ({self.dist_key_col})
                                     )
-                                    DISTRIBUTED BY ({self.dist_key_col})
                                     """.format(self=self)
         plpy.execute(output_table_create_query)
 
@@ -840,7 +836,6 @@ class FitMultipleModel(object):
                                s.{self.dist_key_col}
                         FROM {self.model_output_tbl} o JOIN {self.schedule_tbl} s
                             ON o.{self.dist_key_col} = s.{self.prev_dist_key_col}
-                        DISTRIBUTED BY ({self.dist_key_col})
                     """.format(self=self)
                 )
 
@@ -876,8 +871,7 @@ class FitMultipleModel(object):
                     DROP TABLE IF EXISTS {self.cached_source_table};
                     CREATE {self.unlogged_table} TABLE {self.cached_source_table} AS
                         SELECT {self.dist_key_col} FROM {self.source_table}
-                            GROUP BY {self.dist_key_col}
-                                DISTRIBUTED BY({self.dist_key_col});
+                            GROUP BY {self.dist_key_col};
                     """.format(self=self))
             else:
                 dep_shape_col = 'NULL'
@@ -938,7 +932,6 @@ class FitMultipleModel(object):
                 FROM {self.model_input_tbl} model_in
                     LEFT JOIN {source_table} src
                     USING ({self.dist_key_col})
-                DISTRIBUTED BY({self.dist_key_col})
                 """.format(dep_var_col=dep_var_col,
                            indep_var_col=indep_var_col,
                            dep_shape_col=dep_shape_col,
