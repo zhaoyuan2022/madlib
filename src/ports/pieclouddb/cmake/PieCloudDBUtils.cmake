@@ -63,7 +63,6 @@ function(add_gppkg PIEDB_VERSION PIEDB_VARIANT PIEDB_VARIANT_SHORT UPGRADE_SUPPO
     # Unfortunately, we cannot set a dependency to the built-in package target,
     # i.e., the following does not work:
     # add_dependencies(gppkg package)
-
     add_dependencies(gppkg gppkg_${PIEDB_VARIANT}_${VERSION_})
     ")
 endfunction(add_gppkg)
