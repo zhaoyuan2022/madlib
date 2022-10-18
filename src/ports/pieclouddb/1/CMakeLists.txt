@@ -16,4 +16,4 @@
 # specific language governing permissions and limitations
 # under the License.
 #
-add_current_greenplum_version()
+add_current_pieclouddb_version()

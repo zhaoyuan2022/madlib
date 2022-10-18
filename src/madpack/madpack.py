@@ -1447,7 +1447,7 @@ def main(argv):
                     # only need first digit for major version.
                     dbver = str(dbver_split[0])
                 info_(this, "dbver postgres is %s" %dbver)
-             elif portid == 'pieclouddb':
+            elif portid == 'pieclouddb':
                 if is_rev_gte(dbver_split, get_rev_num('1.0')):
                     # PieCloudDB uses semantic versioning. Hence, only
                     # need first digit for major version.
