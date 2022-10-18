@@ -388,16 +388,16 @@ def _plpy_check(py_min_ver):
 
     # Check PL/Python existence
     rv = _internal_run_query("SELECT count(*) AS CNT FROM pg_language "
-                             "WHERE lanname = 'plpython3u'", True)
+                             "WHERE lanname = 'plpython2u'", True)
     if int(rv[0]['cnt']) > 0:
         info_(this, "> PL/Python already installed", verbose)
     else:
         info_(this, "> PL/Python not installed", verbose)
         info_(this, "> Creating language PL/Python...", True)
         try:
-            _internal_run_query("CREATE LANGUAGE plpython3u;", True)
+            _internal_run_query("CREATE LANGUAGE plpython2u;", True)
         except:
-            error_(this, """Cannot create language plpython3u. Please check if you
+            error_(this, """Cannot create language plpython2u. Please check if you
                 have configured and installed portid (your platform) with
                 `--with-python` option. Stopping installation...""", False)
             raise Exception
@@ -412,7 +412,7 @@ def _plpy_check(py_min_ver):
             # return '.'.join(str(item) for item in sys.version_info[:3])
             return str(sys.version_info[:3]).replace(',','.').replace(' ','').replace(')','').replace('(','')
         $$
-        LANGUAGE plpython3u;
+        LANGUAGE plpython2u;
     """, True)
     rv = _internal_run_query("SELECT plpy_version_for_madlib() AS ver;", True)
     python = rv[0]['ver']
@@ -1304,11 +1304,11 @@ def find_madlib_library_path():
 def set_dynamic_library_path_in_database(dbver_split, madlib_library_path):
 
     global dynamic_library_path
-    dynamic_library_path = _internal_run_query("SHOW dynamic_library_path", True)[0]['dynamic_library_path']
-
+    dynamic_library_path = _internal_run_query("SHOW dynamic_library_path", True)[0]['dynamic_library_path'].lstrip(':')
+    info_(this, "dynamic_path is %s and madlib_library_path is %s" % (dynamic_library_path, madlib_library_path))
     if madlib_library_path not in dynamic_library_path.split(":"):
-        dynamic_library_path = dynamic_library_path + ':' + madlib_library_path
-
+        dynamic_library_path = dynamic_library_path.lstrip(':') + ':' + madlib_library_path
+        info_(this, " new dynamic_path is %s " % (dynamic_library_path))
         if portid == 'greenplum' or portid == 'pieclouddb' :
             if is_rev_gte(dbver_split, get_rev_num('6.0')):
                 ret = os.system('gpconfig -c dynamic_library_path -v \'{0}\''.format(dynamic_library_path))

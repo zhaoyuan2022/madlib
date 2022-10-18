@@ -249,7 +249,7 @@ def xgboost_grid_search(schema_madlib, source_table, id_column, class_label,
     #Save each parameter list in the grid as a row in a distributed table
     grid_search_params_temp_tbl = unique_string('grid_params')
     grid_search_params_temp_tbl_df = unique_string('grid_params_df')
-    dist_str = "m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (params_index)')"
+    dist_str = "m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY')"
     sql = """
         CREATE TEMP TABLE {grid_search_params_temp_tbl}
         (
@@ -503,7 +503,7 @@ def xgboost_predict(schema_madlib, scoring_tbl, mdl_table, mdl_output_tbl,
             {predicted_class_label} TEXT,
             {predicted_class_proba_label} FLOAT8[]
         )
-        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY ({id_column})');
+        m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY');
     """.format(**locals())
     plpy.execute(sql)
     sql = """

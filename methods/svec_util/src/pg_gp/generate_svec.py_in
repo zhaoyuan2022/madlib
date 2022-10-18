@@ -95,7 +95,6 @@ def generate_doc_svecs(schema_madlib, output_tbl, dictionary_tbl,
                 doc_table.{doc_term_col} = dict_table.{dict_term_col}
             GROUP BY
                doc_table.{doc_id_col}
-            m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (doc_id)')
         """
 
     plpy.execute(query.format(

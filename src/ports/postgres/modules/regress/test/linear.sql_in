@@ -15,7 +15,7 @@ CREATE TABLE weibull (
     x1 DOUBLE PRECISION,
     x2 DOUBLE PRECISION,
     y DOUBLE PRECISION
-) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED BY (id)');
+) m4_ifdef(`__POSTGRESQL__', `', `DISTRIBUTED RANDOMLY');
 
 /*
  * We materialize the table here because on MPP systems we want to distribute

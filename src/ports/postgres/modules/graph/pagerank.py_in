@@ -258,9 +258,10 @@ def pagerank(schema_madlib, vertex_table, vertex_id, edge_table, edge_args, out_
 
             # GPDB has "distributed by" clauses to help with indexing.
             # For Postgres we add the index explicitly.
-            if is_platform_pg():
-                plpy.execute("CREATE INDEX ON {0}({1})".format(
-                    edge_temp_table, src))
+            # PIECLOUDDB does not support create index on ostore table
+            #if is_platform_pg():
+            #    plpy.execute("CREATE INDEX ON {0}({1})".format(
+            #        edge_temp_table, src))
 
             # Intermediate tables required.
             cur = unique_string(desp='cur')

@@ -63,9 +63,6 @@ class LDATrainer:
                 counts      INT4[],
                 doc_topic   INT4[]
                 )
-                m4_ifdef(`__POSTGRESQL__', `',
-                    `WITH (APPENDONLY=TRUE)
-                    DISTRIBUTED BY (docid)')
             """.format(work_table_0=self.work_table_0))
 
         plpy.execute("DROP TABLE IF EXISTS " + self.work_table_1)
@@ -77,9 +74,6 @@ class LDATrainer:
                 counts      INT4[],
                 doc_topic   INT4[]
                 )
-                m4_ifdef(`__POSTGRESQL__', `',
-                    `WITH (APPENDONLY=TRUE)
-                    DISTRIBUTED BY (docid)')
             """.format(work_table_1=self.work_table_1))
 
         plpy.execute("""
@@ -107,9 +101,6 @@ class LDATrainer:
                 topic_count         INT4[],
                 topic_assignment    INT4[]
                 )
-                m4_ifdef(`__POSTGRESQL__', `',
-                    `WITH (APPENDONLY=TRUE)
-                    DISTRIBUTED BY (docid)')
             """.format(output_data_table=self.output_data_table))
 
     def init_random(self):
@@ -391,9 +382,6 @@ class LDAPredictor:
                 counts      INT4[],
                 doc_topic   INT4[]
                 )
-                m4_ifdef(`__POSTGRESQL__', `',
-                    `WITH (APPENDONLY=TRUE)
-                    DISTRIBUTED BY (docid)')
             """.format(work_table_0=self.work_table_0))
 
         plpy.execute("DROP TABLE IF EXISTS " + self.work_table_1)
@@ -405,9 +393,6 @@ class LDAPredictor:
                 counts      INT4[],
                 doc_topic   INT4[]
                 )
-                m4_ifdef(`__POSTGRESQL__', `',
-                    `WITH (APPENDONLY=TRUE)
-                    DISTRIBUTED BY (docid)')
             """.format(work_table_1=self.work_table_1))
 
         plpy.execute("""
@@ -419,9 +404,6 @@ class LDAPredictor:
                 topic_count         INT4[],
                 topic_assignment    INT4[]
                 )
-                m4_ifdef(`__POSTGRESQL__', `',
-                    `WITH (APPENDONLY=TRUE)
-                    DISTRIBUTED BY (docid)')
             """.format(doc_topic=self.doc_topic))
 
     def init_random(self):
@@ -644,10 +626,6 @@ def get_topic_desc(schema_madlib, model_table, vocab_table, desc_table,
             word_count INT4[],
             beta FLOAT8
         )
-        m4_ifdef(
-            `__POSTGRESQL__', `',
-            `WITH (APPENDONLY=TRUE) DISTRIBUTED BY
-            (topicid)')
         """)
 
     plpy.execute("""
@@ -671,10 +649,6 @@ def get_topic_desc(schema_madlib, model_table, vocab_table, desc_table,
             topicid INT4,
             word_dist FLOAT[]
         )
-        m4_ifdef(
-            `__POSTGRESQL__', `',
-            `WITH (APPENDONLY=TRUE)
-            DISTRIBUTED BY (topicid)')
         """)
 
     plpy.execute("""
@@ -692,10 +666,6 @@ def get_topic_desc(schema_madlib, model_table, vocab_table, desc_table,
             wordid INT4,
             prob FLOAT,
             word TEXT)
-        m4_ifdef(
-            `__POSTGRESQL__', `',
-            `WITH (APPENDONLY=TRUE)
-            DISTRIBUTED BY (topicid)')
         """.format(desc_table=desc_table))
 
     plpy.execute("""
@@ -738,10 +708,6 @@ def get_topic_word_count(schema_madlib, model_table, output_table):
         CREATE TABLE {output_table} (
             topicid INT4,
             word_count INT4[])
-        m4_ifdef(
-            `__POSTGRESQL__', `',
-            `WITH (APPENDONLY=TRUE)
-            DISTRIBUTED BY (topicid)')
         """.format(output_table=output_table))
 
     plpy.execute("""
@@ -774,10 +740,6 @@ def get_word_topic_count(schema_madlib, model_table, output_table):
         CREATE TABLE {output_table} (
             wordid INT4,
             topic_count INT4[])
-        m4_ifdef(
-            `__POSTGRESQL__', `',
-            `WITH (APPENDONLY=TRUE)
-            DISTRIBUTED BY (wordid)')
         """.format(output_table=output_table))
 
     plpy.execute("""
@@ -804,10 +766,6 @@ def get_word_topic_mapping(schema_madlib, lda_output_table, mapping_table):
             docid   INT4,
             wordid  INT4,
             topicid INT4)
-        m4_ifdef(
-            `__POSTGRESQL__', `',
-            `WITH (APPENDONLY=TRUE)
-            DISTRIBUTED BY (docid)')
         """.format(mapping_table=mapping_table))
 
     ## The following query is a workaround for GPDB 4.3 because it cannot
@@ -901,9 +859,6 @@ def norm_vocab(vocab_table, out_table):
             old_wordid INT4,
             word TEXT
         )
-        m4_ifdef(`__POSTGRESQL__', `',
-        `WITH(APPENDONLY=TRUE)
-        DISTRIBUTED BY (wordid)')
         """.format(out_table=out_table))
 
     plpy.execute("""
@@ -949,9 +904,6 @@ def norm_dataset(data_table, vocab_table, output_table):
             wordid INT4,
             count INT4
         )
-        m4_ifdef(`__POSTGRESQL__', `',
-        `WITH(APPENDONLY=TRUE)
-        DISTRIBUTED BY (docid)')
         """.format(output_table=output_table))
 
     plpy.execute("""
@@ -989,8 +941,6 @@ def conorm_data(data_table, vocab_table, output_data_table, output_vocab_table):
             wordid  INT4,
             word    TEXT
         )
-        m4_ifdef(`__POSTGRESQL__', `', `WITH(APPENDONLY=TRUE)
-        DISTRIBUTED BY (wordid)')
         """)
 
     plpy.execute("""
@@ -1042,8 +992,6 @@ def _convert_data_table(schema_madlib, data_table):
             words INT4[],
             counts INT4[]
         )
-        m4_ifdef(`__POSTGRESQL__', `', `WITH(APPENDONLY=TRUE)
-        DISTRIBUTED BY (docid)')
         """.format(convt_table=convt_table))
 
     with OptimizerControl(False):
